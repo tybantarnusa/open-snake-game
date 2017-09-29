@@ -1,0 +1,22 @@
+language: c
+sudo: required
+services:
+- docker
+before_install:
+- docker pull ubuntu:16.04
+script:
+- docker build -t my_image .
+- docker create --name my_container my_image
+- docker cp my_container:/osg/releases .
+- git add .
+- git commit -m "Deploy"
+deploy:
+  provider: releases
+  api_key:
+    secure: M7XGU271SZ9ASNfPAXsj+3rTkhd1kRcZuEgdFg2Q4F9LHUbV+Yu0n9S/PhS41BXQvPWBcgwJ4iVU3KIBXL9AWoaj49RnQVeBOuHct6zNYMIUh5xxmn3qI+B8AJuimYZ17D0ASYP8byWmRVfqfhZAGrfZw8YDNcopnP0ZNWsM82pvwMPHFNFBYCQwWGhRm8aFRIK1fVsB88Qr+boWXVxKgz6HqXBTGKkb08x74Vm/OL+b/JnabFHxTxY4ctIRoepSmKdr4S1TdajfrZAV8GEQR5CmlbncDYR5GUWFuas/tGlAiSnkjgrJkFYSL5wuHkfpfDoavJ/i3TraSULjURicngbTvJ593Xx35ZV4kMQ9r4sqOfNBlMIG/5tjTZ5aEYKlbUO77Kd2QyeWVSadTT5mrKDc9mPkqXF9/d/KbGRacuiQTNCmJtJrLSOY1jZJm0ZNXxxsrvKdMv6Sy7C6DA71K6vUBK/rDBzt1NdhYCcz8IqO8r9fq0yvEtYdbVNGGwtTV+Skq4FVBh5zrI+N/aEtR6kmIsFih2b1tdlf/EJbzLVPldjjK/7X/WUeLTvTl25pTbdmyaFQAYqQh3PaUIGbq1x0L2WcxtmbXNbkvkLAtL2lZMMaiUE3QCxbUxWAgPFQeGmlLwUlRkyopkeZMWdgZyhF0VURsNfDcidrB9HXI9A=
+  skip_cleanup: true
+  file_glob: true
+  file: "releases/*"
+  on:
+    repo: tybantarnusa/open-snake-game
+    all_branches: true
